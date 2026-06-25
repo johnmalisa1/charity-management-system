@@ -12,7 +12,7 @@
         <div class="col-md-3">
             <div class="card bg-dark text-light">
                 <div class="card-body">
-                    <h5 class="card-title">💰 Total Donations</h5>
+                    <h5 class="card-title"><i class="bi bi-cash-stack me-2"></i> Total Donations</h5>
                     <h2 class="fw-bold">{{ number_format($totalDonations) }} TZS</h2>
                 </div>
             </div>
@@ -20,7 +20,7 @@
         <div class="col-md-3">
             <div class="card bg-dark text-light">
                 <div class="card-body">
-                    <h5 class="card-title">📢 Campaigns Supported</h5>
+                    <h5 class="card-title"><i class="bi bi-megaphone me-2"></i> Campaigns Supported</h5>
                     <h2 class="fw-bold">{{ $campaignsSupported }}</h2>
                 </div>
             </div>
@@ -28,7 +28,7 @@
         <div class="col-md-3">
             <div class="card bg-dark text-light">
                 <div class="card-body">
-                    <h5 class="card-title">🎉 Events Joined</h5>
+                    <h5 class="card-title"><i class="bi bi-calendar-event me-2"></i> Events Joined</h5>
                     <h2 class="fw-bold">{{ $eventsJoined }}</h2>
                 </div>
             </div>
@@ -36,7 +36,7 @@
         <div class="col-md-3">
             <div class="card bg-dark text-light">
                 <div class="card-body">
-                    <h5 class="card-title">🤝 Volunteer Activities</h5>
+                    <h5 class="card-title"><i class="bi bi-handshake me-2"></i> Volunteer Activities</h5>
                     <h2 class="fw-bold">{{ $volunteerActivities }}</h2>
                 </div>
             </div>
@@ -46,7 +46,7 @@
     <!-- Donation Trends Chart -->
     <div class="card bg-dark text-light shadow mb-6">
         <div class="card-body">
-            <h5 class="card-title">📈 Donation Trends</h5>
+            <h5 class="card-title"><i class="bi bi-graph-up-arrow me-2"></i> Donation Trends</h5>
             <div class="h-64">
                 <canvas id="donationTrendsChart"></canvas>
             </div>
@@ -56,7 +56,7 @@
     <!-- Recent Donations -->
     <div class="card bg-dark text-light shadow mb-6">
         <div class="card-body">
-            <h5 class="card-title">🕒 Recent Donations</h5>
+            <h5 class="card-title"><i class="bi bi-clock-history me-2"></i> Recent Donations</h5>
             <table class="table table-dark table-striped mb-3">
                 <thead>
                     <tr>
@@ -82,7 +82,7 @@
     <!-- Featured Campaigns -->
     <div class="card bg-dark text-light shadow mb-6">
         <div class="card-body">
-            <h5 class="card-title">🔥 Featured Campaigns</h5>
+            <h5 class="card-title"><i class="bi bi-star-fill me-2"></i> Featured Campaigns</h5>
             <div class="row">
                 @foreach($featuredCampaigns as $campaign)
                     <div class="col-md-6 mb-4">
@@ -109,7 +109,7 @@
     <!-- Upcoming Events -->
     <div class="card bg-dark text-light shadow mb-6">
         <div class="card-body">
-            <h5 class="card-title">📅 Upcoming Events</h5>
+            <h5 class="card-title"><i class="bi bi-calendar-check me-2"></i> Upcoming Events</h5>
             <table class="table table-dark table-hover mb-3">
                 <thead>
                     <tr>
@@ -139,7 +139,7 @@
     <!-- Volunteer Activities -->
     <div class="card bg-dark text-light shadow mb-6">
         <div class="card-body">
-            <h5 class="card-title">🤝 Recent Volunteer Activities</h5>
+            <h5 class="card-title"><i class="bi bi-hand-thumbs-up me-2"></i> Recent Volunteer Activities</h5>
             @if($user->volunteerActivities->isEmpty())
                 <p>No volunteer activities yet.</p>
             @else
@@ -169,7 +169,7 @@
     <!-- Notifications -->
     <div class="card bg-dark text-light shadow mb-6">
         <div class="card-body">
-            <h5 class="card-title">🔔 Latest Notifications</h5>
+            <h5 class="card-title"><i class="bi bi-bell me-2"></i> Latest Notifications</h5>
             @foreach($latestNotifications as $note)
                 <div class="alert alert-info">{{ $note->message }}</div>
             @endforeach
@@ -211,6 +211,7 @@
     });
 </script>
 @endpush
+
 
 
 

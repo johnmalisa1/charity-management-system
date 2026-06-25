@@ -14,34 +14,38 @@ class DonorController extends Controller
 {
     // Dashboard
     public function index()
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        // Statistics
-        $totalDonations = Donation::where('donor_id', $user->id)->sum('amount');
-        $campaignsSupported = Donation::where('donor_id', $user->id)
-            ->distinct('campaign_id')->count('campaign_id');
-        $eventsJoined = Event::whereHas('participants', fn($q) => $q->where('user_id', $user->id))->count();
-        $volunteerActivities = $user->volunteerActivities()->count() ?? 0;
+    // Statistics
+    $totalDonations = Donation::where('donor_id', $user->id)->sum('amount');
+    $campaignsSupported = Donation::where('donor_id', $user->id)
+        ->distinct('campaign_id')->count('campaign_id');
 
-        // Previews
-        $recentDonations = Donation::where('donor_id', $user->id)->latest()->take(5)->get();
-        $featuredCampaigns = Campaign::where('is_featured', true)->take(2)->get();
-        $upcomingEvents = Event::where('start_time', '>=', now())->orderBy('start_time')->take(3)->get();
-        $latestNotifications = Notification::where('user_id', $user->id)->latest()->take(3)->get();
+    // ✅ Use donor pivot relationship
+    $eventsJoined = $user->joinedDonorEvents()->count();
 
-        return view('dashboards.donor', compact(
-            'user',
-            'totalDonations',
-            'campaignsSupported',
-            'eventsJoined',
-            'volunteerActivities',
-            'recentDonations',
-            'featuredCampaigns',
-            'upcomingEvents',
-            'latestNotifications'
-        ));
-    }
+    $volunteerActivities = $user->volunteerActivities()->count() ?? 0;
+
+    // Previews
+    $recentDonations = Donation::where('donor_id', $user->id)->latest()->take(5)->get();
+    $featuredCampaigns = Campaign::where('is_featured', true)->take(2)->get();
+    $upcomingEvents = Event::where('start_time', '>=', now())->orderBy('start_time')->take(3)->get();
+    $latestNotifications = Notification::where('user_id', $user->id)->latest()->take(3)->get();
+
+    return view('dashboards.donor', compact(
+        'user',
+        'totalDonations',
+        'campaignsSupported',
+        'eventsJoined',
+        'volunteerActivities',
+        'recentDonations',
+        'featuredCampaigns',
+        'upcomingEvents',
+        'latestNotifications'
+    ));
+}
+
 
     // My Donations page
     public function donations()

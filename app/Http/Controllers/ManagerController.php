@@ -97,7 +97,7 @@ public function storeCampaign(Request $request)
 
     $campaign = Campaign::create($validated + [
         'raised_amount' => 0,
-        'status'        => 'pending',
+        'status'        => 'active', // ✅ changed from 'pending' to 'active'
     ]);
 
     // ✅ Save multiple images into galleries
@@ -114,6 +114,7 @@ public function storeCampaign(Request $request)
 
     return redirect()->route('manager.campaigns')->with('success', 'Campaign created successfully.');
 }
+
 
 
 public function editCampaign(Campaign $campaign)
