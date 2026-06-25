@@ -68,74 +68,68 @@
       
             {{-- Admin Sidebar --}}
 @role('Admin')
-    <li class="nav-item"><a href="{{ route('admin.dashboard') }}" class="nav-link">📊 Dashboard</a></li>
-    <li class="nav-item"><a href="{{ route('admin.users.index') }}" class="nav-link">👥 Users</a></li>
-    <li class="nav-item"><a href="{{ route('admin.donations.index') }}" class="nav-link">💰 Donations</a></li>
-    <li class="nav-item"><a href="{{ route('admin.campaigns.index') }}" class="nav-link">📢 Campaigns</a></li>
-    <li class="nav-item"><a href="{{ route('admin.charities.index') }}" class="nav-link">🏥 Charities</a></li>
-    <li class="nav-item"><a href="{{ route('admin.events.index') }}" class="nav-link">🎉 Events</a></li>
-    <li class="nav-item"><a href="{{ route('admin.volunteers.index') }}" class="nav-link">🤝 Volunteers</a></li>
-    <li class="nav-item"><a href="{{ route('admin.reports') }}" class="nav-link">📑 Reports</a></li>
+    <li class="nav-item"><a href="{{ route('admin.dashboard') }}" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+    <li class="nav-item"><a href="{{ route('admin.users.index') }}" class="nav-link"><i class="bi bi-people"></i> Users</a></li>
+    <li class="nav-item"><a href="{{ route('admin.donations.index') }}" class="nav-link"><i class="bi bi-cash-stack"></i> Donations</a></li>
+    <li class="nav-item"><a href="{{ route('admin.campaigns.index') }}" class="nav-link"><i class="bi bi-megaphone"></i> Campaigns</a></li>
+    <li class="nav-item"><a href="{{ route('admin.charities.index') }}" class="nav-link"><i class="bi bi-hospital"></i> Charities</a></li>
+    <li class="nav-item"><a href="{{ route('admin.events.index') }}" class="nav-link"><i class="bi bi-calendar-event"></i> Events</a></li>
+    <li class="nav-item"><a href="{{ route('admin.volunteers.index') }}" class="nav-link"><i class="bi bi-handshake"></i> Volunteers</a></li>
+    <li class="nav-item"><a href="{{ route('admin.reports') }}" class="nav-link"><i class="bi bi-file-earmark-bar-graph"></i> Reports</a></li>
     <li class="nav-item">
-    <a href="{{ route('admin.notifications') }}" class="nav-link d-flex align-items-center">
-        🔔 Notifications
-        @if(isset($unreadCount) && $unreadCount > 0)
-            <span class="badge bg-danger ms-2">{{ $unreadCount }}</span>
-        @endif
-    </a>
+        <a href="{{ route('admin.notifications') }}" class="nav-link d-flex align-items-center">
+            <i class="bi bi-bell"></i> Notifications
+            @if(isset($unreadCount) && $unreadCount > 0)
+                <span class="badge bg-danger ms-2">{{ $unreadCount }}</span>
+            @endif
+        </a>
+    </li>
+    <li class="nav-item"><a href="{{ route('admin.settings') }}" class="nav-link"><i class="bi bi-gear"></i> Settings</a></li>
+@endrole
+
+{{-- Donor Sidebar --}}
+@role('Donor')
+    <li class="nav-item"><a href="{{ route('donor.dashboard') }}" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+    <li class="nav-item"><a href="{{ route('donor.donations') }}" class="nav-link"><i class="bi bi-cash-stack"></i> My Donations</a></li>
+    <li class="nav-item"><a href="{{ route('donor.campaigns') }}" class="nav-link"><i class="bi bi-megaphone"></i> Campaigns</a></li>
+    <li class="nav-item"><a href="{{ route('donor.events') }}" class="nav-link"><i class="bi bi-calendar-event"></i> Events</a></li>
+    <li class="nav-item"><a href="{{ route('donor.receipts') }}" class="nav-link"><i class="bi bi-receipt"></i> Donation Receipts</a></li>
+    <li class="nav-item"><a href="{{ route('donor.notifications') }}" class="nav-link"><i class="bi bi-bell"></i> Notifications</a></li>
+    <li class="nav-item"><a href="{{ route('donor.profile') }}" class="nav-link"><i class="bi bi-person-circle"></i> Profile Settings</a></li>
+@endrole
+
+{{-- Manager Sidebar --}}
+@role('Manager')
+    <li class="nav-item"><a href="{{ route('manager.dashboard') }}" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+    <li class="nav-item"><a href="{{ route('manager.campaigns') }}" class="nav-link"><i class="bi bi-megaphone"></i> Campaigns</a></li>
+    <li class="nav-item"><a href="{{ route('manager.donations') }}" class="nav-link"><i class="bi bi-cash-stack"></i> Donations</a></li>
+    <li class="nav-item"><a href="{{ route('manager.events') }}" class="nav-link"><i class="bi bi-calendar-event"></i> Events</a></li>
+    <li class="nav-item"><a href="{{ route('manager.volunteers') }}" class="nav-link"><i class="bi bi-handshake"></i> Volunteers</a></li>
+    <li class="nav-item"><a href="{{ route('manager.participants') }}" class="nav-link"><i class="bi bi-people"></i> Participants</a></li>
+    <li class="nav-item"><a href="{{ route('manager.reports') }}" class="nav-link"><i class="bi bi-file-earmark-bar-graph"></i> Reports</a></li>
+    <li class="nav-item"><a href="{{ route('manager.notifications') }}" class="nav-link"><i class="bi bi-bell"></i> Notifications</a></li>
+    <li class="nav-item"><a href="{{ route('manager.gallery') }}" class="nav-link"><i class="bi bi-images"></i> Gallery</a></li>
+    <li class="nav-item"><a href="{{ route('manager.feedback.index') }}" class="nav-link"><i class="bi bi-chat-dots"></i> Feedback</a></li>
+    <li class="nav-item"><a href="{{ route('manager.profile') }}" class="nav-link"><i class="bi bi-person-circle"></i> Profile Settings</a></li>
+@endrole
+
+{{-- Volunteer Sidebar --}}
+@role('Volunteer')
+    <li class="nav-item"><a href="{{ route('volunteer.dashboard') }}" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+    <li class="nav-item"><a href="{{ route('volunteer.events.index') }}" class="nav-link"><i class="bi bi-calendar-event"></i> Events</a></li>
+    <li class="nav-item"><a href="{{ route('volunteer.history') }}" class="nav-link"><i class="bi bi-journal-text"></i> Participation History</a></li>
+    <li class="nav-item"><a href="{{ route('volunteer.notifications') }}" class="nav-link"><i class="bi bi-bell"></i> Notifications</a></li>
+    <li class="nav-item"><a href="{{ route('volunteer.profile') }}" class="nav-link"><i class="bi bi-person-circle"></i> Profile Settings</a></li>
+@endrole
+
+{{-- Logout (visible to all) --}}
+<li class="nav-item">
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit" class="nav-link"><i class="bi bi-box-arrow-right"></i> Logout</button>
+    </form>
 </li>
 
-    <li class="nav-item"><a href="{{ route('admin.settings') }}" class="nav-link">⚙️ Settings</a></li>
-@endrole
-
-
-            {{-- Donor Sidebar --}}
-            @role('Donor')
-                <li class="nav-item"><a href="{{ route('donor.dashboard') }}" class="nav-link">📊 Dashboard</a></li>
-                <li class="nav-item"><a href="{{ route('donor.donations') }}" class="nav-link">💰 My Donations</a></li>
-                <li class="nav-item"><a href="{{ route('donor.campaigns') }}" class="nav-link">📢 Campaigns</a></li>
-                <li class="nav-item"><a href="{{ route('donor.events') }}" class="nav-link">🎉 Events</a></li>
-                <li class="nav-item"><a href="{{ route('donor.receipts') }}" class="nav-link">📄 Donation Receipts</a></li>
-                <li class="nav-item"><a href="{{ route('donor.notifications') }}" class="nav-link">🔔 Notifications</a></li>
-                <li class="nav-item"><a href="{{ route('donor.profile') }}" class="nav-link">👤 Profile Settings</a></li>
-            @endrole
-
-           {{-- Manager Sidebar --}}
-@role('Manager')
-    <li class="nav-item"><a href="{{ route('manager.dashboard') }}" class="nav-link">📊 Dashboard</a></li>
-    <li class="nav-item"><a href="{{ route('manager.campaigns') }}" class="nav-link">📢 Campaigns</a></li>
-    <li class="nav-item"><a href="{{ route('manager.donations') }}" class="nav-link">💰 Donations</a></li>
-    <li class="nav-item"><a href="{{ route('manager.events') }}" class="nav-link">🎉 Events</a></li>
-    <li class="nav-item"><a href="{{ route('manager.volunteers') }}" class="nav-link">🤝 Volunteers</a></li>
-    <li class="nav-item"><a href="{{ route('manager.participants') }}" class="nav-link">👥 Participants</a></li>
-    <li class="nav-item"><a href="{{ route('manager.reports') }}" class="nav-link">📑 Reports</a></li>
-    <li class="nav-item"><a href="{{ route('manager.notifications') }}" class="nav-link">🔔 Notifications</a></li>
-    <li class="nav-item"><a href="{{ route('manager.gallery') }}" class="nav-link">🖼️ Gallery</a></li>
-    <li class="nav-item">
-    <a href="{{ route('manager.feedback.index') }}" class="nav-link">💬 Feedback</a></li>
-    <li class="nav-item"><a href="{{ route('manager.profile') }}" class="nav-link">👤 Profile Settings</a></li>
-@endrole
-
-
-            {{-- Volunteer Sidebar --}}
-@role('Volunteer')
-    <li class="nav-item"><a href="{{ route('volunteer.dashboard') }}" class="nav-link">📊 Dashboard</a></li>
-    <li class="nav-item"><a href="{{ route('volunteer.events.index') }}" class="nav-link">🎉 Events</a></li> <!-- fixed -->
-    <li class="nav-item"><a href="{{ route('volunteer.history') }}" class="nav-link">📄 Participation History</a></li>
-    <li class="nav-item"><a href="{{ route('volunteer.notifications') }}" class="nav-link">🔔 Notifications</a></li>
-    <li class="nav-item"><a href="{{ route('volunteer.profile') }}" class="nav-link">👤 Profile Settings</a></li>
-@endrole
-
-
-
-
-            {{-- Logout (visible to all) --}}
-            <li class="nav-item">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="nav-link">🚪 Logout</button>
-                </form>
-            </li>
         </ul>
     </nav>
 
