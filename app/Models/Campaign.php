@@ -14,6 +14,8 @@ class Campaign extends Model
         'title',
         'description',
         'goal_amount',
+        'raised_amount',   
+        'status',          
         'start_date',
         'end_date',
     ];
@@ -28,11 +30,12 @@ class Campaign extends Model
         return $this->hasMany(Donation::class);
     }
 
-    // ✅ New relationship: Campaign → Galleries
+    // ✅ Campaign → Galleries
     public function galleries()
     {
         return $this->hasMany(Gallery::class);
     }
 }
+
 
 

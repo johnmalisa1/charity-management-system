@@ -18,6 +18,8 @@
         <div class="card-body">
             <h5 class="card-title">{{ $campaign->title }}</h5>
             <p class="card-text">{{ $campaign->description }}</p>
+            
+            <!-- ✅ Goal and Raised amounts -->
             <p class="card-text">
                 Goal: {{ number_format($campaign->goal_amount) }} <br>
                 Raised: {{ number_format($campaign->raised_amount) }}
@@ -30,10 +32,18 @@
                     : 0;
             @endphp
             <div class="progress mb-3">
-                <div class="progress-bar bg-success" style="width: {{ $progress }}%">
+                <div class="progress-bar bg-success" role="progressbar"
+                     style="width: {{ $progress }}%;" 
+                     aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100">
                     {{ round($progress) }}%
                 </div>
             </div>
+
+            <!-- ✅ Raised vs Goal text -->
+            <p class="mt-2">
+                Raised: {{ number_format($campaign->raised_amount) }} / 
+                Goal: {{ number_format($campaign->goal_amount) }}
+            </p>
 
             <!-- ✅ Donate form -->
             <form action="{{ route('donor.campaigns.donate', $campaign->id) }}" method="POST" class="d-inline">
@@ -64,5 +74,6 @@
     </div>
 </div>
 @endsection
+
 
 
