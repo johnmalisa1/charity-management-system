@@ -63,84 +63,103 @@
 <div class="card bg-dark text-light shadow rounded-lg p-3 mb-4">
     <h5 class="mb-3">Campaign Progress</h5>
     @foreach($campaigns as $campaign)
-        <p class="mb-1">{{ $campaign->title }}</p>
         @php
-            $progress = ($campaign->target > 0)
-                ? ($campaign->collected / $campaign->target) * 100
+            $progress = $campaign->goal_amount > 0
+                ? min(100, ($campaign->raised_amount / $campaign->goal_amount) * 100)
                 : 0;
         @endphp
+
+        <p class="mb-1 fw-bold">{{ $campaign->title }}</p>
         <div class="progress mb-2" style="height: 20px;">
             <div class="progress-bar bg-success" role="progressbar"
                  style="width: {{ $progress }}%"
-                 aria-valuenow="{{ $campaign->collected }}"
+                 aria-valuenow="{{ $progress }}"
                  aria-valuemin="0"
-                 aria-valuemax="{{ $campaign->target ?? 0 }}">
-                {{ number_format($progress, 1) }}%
+                 aria-valuemax="100">
+                {{ round($progress, 1) }}%
             </div>
         </div>
         <small>
-            Collected: {{ number_format($campaign->collected) }} TZS /
-            Target: {{ number_format($campaign->target ?? 0) }} TZS
+            Collected: {{ number_format($campaign->raised_amount) }} TZS /
+            Target: {{ number_format($campaign->goal_amount) }} TZS
         </small>
     @endforeach
 </div>
 
 
-    <!-- Recent Activity -->
-    <div class="card bg-dark text-light shadow rounded-lg p-3">
-        <h5 class="mb-3">Recent Activity</h5>
-        <div class="row">
-            <!-- Donations -->
-            <div class="col-md-3">
-                <h6 class="text-secondary">Latest Donations</h6>
-                <ul class="list-unstyled small">
-                    @foreach($recentDonations as $donation)
-                        <li>💰 {{ $donation->user->name ?? 'Anonymous' }} donated 
+
+   <!-- Recent Activity -->
+<div class="card bg-dark text-light shadow rounded-lg p-3">
+    <h5 class="mb-3">Recent Activity</h5>
+    <div class="row">
+        <!-- Donations -->
+        <div class="col-md-3">
+            <h6 class="text-secondary">Latest Donations</h6>
+            <ul class="list-unstyled small">
+                @foreach($recentDonations as $donation)
+                    <li class="d-flex align-items-center">
+                        <i class="bi bi-cash-stack me-2"></i>
+                        <span>
+                            {{ $donation->user->name ?? 'Anonymous' }} donated 
                             {{ number_format($donation->amount) }} TZS 
                             <span class="text-muted">({{ $donation->created_at->diffForHumans() }})</span>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
+                        </span>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
 
-            <!-- Campaigns -->
-            <div class="col-md-3">
-                <h6 class="text-secondary">New Campaigns</h6>
-                <ul class="list-unstyled small">
-                    @foreach($recentCampaigns as $campaign)
-                        <li>📢 {{ $campaign->title }} 
+        <!-- Campaigns -->
+        <div class="col-md-3">
+            <h6 class="text-secondary">New Campaigns</h6>
+            <ul class="list-unstyled small">
+                @foreach($recentCampaigns as $campaign)
+                    <li class="d-flex align-items-center">
+                        <i class="bi bi-megaphone me-2"></i>
+                        <span>
+                            {{ $campaign->title }} 
                             <span class="text-muted">({{ $campaign->created_at->diffForHumans() }})</span>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
+                        </span>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
 
-            <!-- Users -->
-            <div class="col-md-3">
-                <h6 class="text-secondary">New Users</h6>
-                <ul class="list-unstyled small">
-                    @foreach($recentUsers as $user)
-                        <li>👤 {{ $user->name }} 
+        <!-- Users -->
+        <div class="col-md-3">
+            <h6 class="text-secondary">New Users</h6>
+            <ul class="list-unstyled small">
+                @foreach($recentUsers as $user)
+                    <li class="d-flex align-items-center">
+                        <i class="bi bi-person-circle me-2"></i>
+                        <span>
+                            {{ $user->name }} 
                             <span class="text-muted">({{ $user->created_at->diffForHumans() }})</span>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
+                        </span>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
 
-            <!-- Events -->
-            <div class="col-md-3">
-                <h6 class="text-secondary">Latest Events</h6>
-                <ul class="list-unstyled small">
-                    @foreach($recentEvents as $event)
-                        <li>🎉 {{ $event->title }} 
+        <!-- Events -->
+        <div class="col-md-3">
+            <h6 class="text-secondary">Latest Events</h6>
+            <ul class="list-unstyled small">
+                @foreach($recentEvents as $event)
+                    <li class="d-flex align-items-center">
+                        <i class="bi bi-calendar-event me-2"></i>
+                        <span>
+                            {{ $event->title }} 
                             <span class="text-muted">({{ $event->created_at->diffForHumans() }})</span>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
+                        </span>
+                    </li>
+                @endforeach
+            </ul>
         </div>
     </div>
+</div>
 @endsection
+
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
