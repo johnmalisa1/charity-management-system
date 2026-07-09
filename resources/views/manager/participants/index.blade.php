@@ -19,35 +19,45 @@
             <table class="table table-dark table-striped">
                 <thead>
                     <tr>
-                        <th>User</th>
-                        <th>Email</th>
                         <th>Event</th>
+                        <th>Name</th>
+                        <th>Email</th>
                         <th>Role</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($participants as $participant)
+                    @forelse($paginated as $participant)
                         <tr>
-                            <td>{{ $participant->user->name }}</td>
-                            <td>{{ $participant->user->email }}</td>
-                            <td>{{ $participant->event->title }}</td>
-                            <td>{{ $participant->role ?? 'N/A' }}</td>
+                            <td>{{ $participant['event'] }}</td>
+                            <td>{{ $participant['name'] }}</td>
+                            <td>{{ $participant['email'] }}</td>
+                            <td>{{ $participant['role'] }}</td>
                             <td>
-                                <a href="{{ route('manager.participants.edit', $participant->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ route('manager.participants.destroy', $participant->id) }}" method="POST" class="d-inline">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger"
-                                        onclick="return confirm('Delete this participant?')">Delete</button>
-                                </form>
+                                {{-- Only manual participants can be edited/deleted --}}
+                                @if($participant['role'] === 'Participant')
+                                    <a href="{{ route('manager.participants.edit', $participant['id'] ?? '') }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <form action="{{ route('manager.participants.destroy', $participant['id'] ?? '') }}" method="POST" class="d-inline">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Delete this participant?')">Delete</button>
+                                    </form>
+                                @else
+                                    <span class="text-muted">Auto-joined</span>
+                                @endif
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-muted">No participants yet.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
-            {{ $participants->links() }}
+            {{ $paginated->links() }}
         </div>
     </div>
 </div>
 @endsection
+
 

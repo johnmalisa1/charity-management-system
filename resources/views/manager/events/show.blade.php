@@ -17,6 +17,7 @@
         </div>
     </div>
 
+    <!-- Unified Participants -->
     <div class="card bg-dark text-light mb-4">
         <div class="card-body">
             <h4>Participants</h4>
@@ -25,6 +26,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Role</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,37 +34,19 @@
                         <tr>
                             <td>{{ $participant->name }}</td>
                             <td>{{ $participant->email }}</td>
+                            <td>
+                                @if($participant->hasRole('Donor'))
+                                    Donor
+                                @elseif($participant->hasRole('Volunteer'))
+                                    Volunteer
+                                @else
+                                    Participant
+                                @endif
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="2" class="text-muted">No participants yet.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-            {{ $participants->links() }}
-        </div>
-    </div>
-
-    <div class="card bg-dark text-light mb-4">
-        <div class="card-body">
-            <h4>Volunteers</h4>
-            <table class="table table-dark table-striped">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($event->volunteers as $volunteer)
-                        <tr>
-                            <td>{{ $volunteer->name }}</td>
-                            <td>{{ $volunteer->email }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="2" class="text-muted">No volunteers have joined this event yet.</td>
+                            <td colspan="3" class="text-muted">No participants yet.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -70,6 +54,7 @@
         </div>
     </div>
 
+    <!-- Donations -->
     <div class="card bg-dark text-light mb-4">
         <div class="card-body">
             <h4>Donations (via Campaign)</h4>
@@ -101,4 +86,5 @@
 
 </div>
 @endsection
+
 

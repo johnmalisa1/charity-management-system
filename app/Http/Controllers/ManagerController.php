@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\EventParticipant;
 use App\Models\Gallery;
 use App\models\Feedback;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ManagerController extends Controller
 {
@@ -298,15 +299,33 @@ public function destroyEvent(Event $event)
     return redirect()->route('manager.events')->with('success', 'Event deleted successfully.');
 }
 
+
+
 public function showEvent(Event $event)
 {
-    // Fetch related data
-    $participants = $event->participants()->paginate(10); 
-    $volunteers   = $event->volunteers()->paginate(10);     
-    $donations    = Donation::where('campaign_id', $event->campaign_id)->paginate(10);
+    // Load donors, volunteers, and campaign with donations
+    $event->load(['donors', 'volunteers', 'campaign.donations.donor']);
 
-    return view('manager.events.show', compact('event', 'participants', 'volunteers', 'donations'));
+    // Merge donors and volunteers into unified participants
+    $participants = $event->donors->merge($event->volunteers);
+
+    // Donations via campaign (if campaign exists)
+    if ($event->campaign) {
+        $donations = $event->campaign->donations()->with('donor')->paginate(10);
+    } else {
+        // Return an empty paginator instead of a plain collection
+        $donations = new LengthAwarePaginator([], 0, 10, 1, [
+            'path' => request()->url(),
+            'query' => request()->query(),
+        ]);
+    }
+
+    return view('manager.events.show', compact('event', 'participants', 'donations'));
 }
+
+
+
+
 
 
 
@@ -412,11 +431,58 @@ public function destroyNotification(Notification $notification)
 }
 
 
-    // List participants
+    // List participants (unified: donors + volunteers + manual participants)
 public function participants()
 {
-    $participants = EventParticipant::with(['event', 'user'])->latest()->paginate(10);
-    return view('manager.participants.index', compact('participants'));
+    // Load events with donors, volunteers, and manual participants
+    $events = Event::with(['donors', 'volunteers', 'participants.user'])->get();
+
+    $participants = collect();
+
+    foreach ($events as $event) {
+        // Donors
+        foreach ($event->donors as $donor) {
+            $participants->push([
+                'event' => $event->title,
+                'name'  => $donor->name,
+                'email' => $donor->email,
+                'role'  => 'Donor',
+            ]);
+        }
+
+        // Volunteers
+        foreach ($event->volunteers as $volunteer) {
+            $participants->push([
+                'event' => $event->title,
+                'name'  => $volunteer->name,
+                'email' => $volunteer->email,
+                'role'  => 'Volunteer',
+            ]);
+        }
+
+        // Manually added participants (EventParticipant model)
+        foreach ($event->participants as $participant) {
+            $participants->push([
+                'event' => $event->title,
+                'name'  => $participant->user->name,
+                'email' => $participant->user->email,
+                'role'  => $participant->role ?? 'Participant',
+            ]);
+        }
+    }
+
+    // Paginate manually
+    $page = request()->get('page', 1);
+    $perPage = 10;
+    $paginated = new \Illuminate\Pagination\LengthAwarePaginator(
+        $participants->forPage($page, $perPage),
+        $participants->count(),
+        $perPage,
+        $page,
+        ['path' => request()->url(), 'query' => request()->query()]
+    );
+
+    return view('manager.participants.index', compact('paginated'));
 }
 
 // Show create form
@@ -427,7 +493,7 @@ public function createParticipant()
     return view('manager.participants.create', compact('events', 'users'));
 }
 
-// Store new participant
+// Store new participant (manual entry)
 public function storeParticipant(Request $request)
 {
     $validated = $request->validate([
@@ -469,6 +535,7 @@ public function destroyParticipant(EventParticipant $participant)
     $participant->delete();
     return redirect()->route('manager.participants')->with('success', 'Participant deleted successfully.');
 }
+
 
   // Reports dashboard
 public function reports(Request $request)
