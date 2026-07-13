@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    // -------------------------------
+    // Stakaba Sandbox Payment Settings
+    // -------------------------------
+    'stakaba' => [
+        'key' => env('STAKABA_API_KEY'),
+        'base_url' => env('STAKABA_BASE_URL', 'https://api.stakaba.com'),
+    ],
+
 ];
+

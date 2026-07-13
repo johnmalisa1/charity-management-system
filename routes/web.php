@@ -241,6 +241,11 @@ Route::prefix('volunteer')->name('volunteer.')->middleware(['auth'])->group(func
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+use App\Http\Controllers\StakabaWebhookController;
+
+Route::post('/webhooks/stakaba', [StakabaWebhookController::class, 'handle'])->name('webhooks.stakaba');
+
+
 require __DIR__.'/auth.php';
 
 
