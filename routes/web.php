@@ -242,8 +242,14 @@ Route::prefix('volunteer')->name('volunteer.')->middleware(['auth'])->group(func
 });
 
 use App\Http\Controllers\StakabaWebhookController;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
-Route::post('/webhooks/stakaba', [StakabaWebhookController::class, 'handle'])->name('webhooks.stakaba');
+Route::post('/webhooks/stakaba', [StakabaWebhookController::class, 'handle'])
+    ->withoutMiddleware([VerifyCsrfToken::class])
+    ->name('webhooks.stakaba');
+
+
+
 
 
 require __DIR__.'/auth.php';
