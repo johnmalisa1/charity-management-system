@@ -182,13 +182,19 @@ Route::prefix('donor')->name('donor.')->middleware(['auth'])->group(function () 
     // Campaigns
     Route::get('/campaigns', [DonorController::class, 'campaigns'])->name('campaigns');
     Route::get('/campaigns/{campaign}', [DonorController::class, 'showCampaign'])->name('campaigns.show');
-    Route::post('/campaigns/{campaign}/donate', [DonorController::class, 'donate'])->name('campaigns.donate');
+
+    // ✅ New donation flow
+    Route::post('/campaigns/{campaign}/donate/confirm', [DonorController::class, 'confirmDonation'])->name('campaigns.donate.confirm');
+    Route::post('/donations/store', [DonorController::class, 'storeDonation'])->name('donations.store');
+
+    // (optional: keep old direct donate route if you want backwards compatibility)
+    // Route::post('/campaigns/{campaign}/donate', [DonorController::class, 'donate'])->name('campaigns.donate');
 
     // Events
     Route::get('/events', [DonorController::class, 'events'])->name('events');
     Route::get('/events/{event}', [DonorController::class, 'showEvent'])->name('events.show');
     Route::post('/events/{event}/join', [DonorController::class, 'joinEvent'])->name('events.join');
-    Route::post('/events/{event}/cancel', [DonorController::class, 'cancelEvent'])->name('events.cancel'); // ✅ added
+    Route::post('/events/{event}/cancel', [DonorController::class, 'cancelEvent'])->name('events.cancel');
 
     // Receipts
     Route::get('/receipts', [DonorController::class, 'receipts'])->name('receipts');
@@ -203,6 +209,7 @@ Route::prefix('donor')->name('donor.')->middleware(['auth'])->group(function () 
     // Volunteer Activities
     Route::get('/volunteer', [DonorController::class, 'volunteer'])->name('volunteer');
 });
+
 
 
 

@@ -45,11 +45,13 @@
                         <p>Raised: {{ $campaign->raised_amount }} / Goal: {{ $campaign->goal_amount }}</p>
 
                         <!-- ✅ Donate form -->
-                        <form action="{{ route('donor.campaigns.donate', $campaign->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            <input type="number" name="amount" min="1" class="form-control mb-2" placeholder="Enter amount" required>
-                            <button type="submit" class="btn btn-outline-light btn-sm">Donate</button>
-                        </form>
+<form action="{{ route('donor.campaigns.donate.confirm', $campaign->id) }}" method="POST" class="d-inline">
+    @csrf
+    <input type="number" name="amount" min="1" class="form-control mb-2" placeholder="Enter amount" required>
+    <button type="submit" class="btn btn-outline-light btn-sm">Donate</button>
+</form>
+
+
 
                         <!-- ✅ View Details button -->
                         <a href="{{ route('donor.campaigns.show', $campaign->id) }}" class="btn btn-info btn-sm ms-2">

@@ -9,6 +9,8 @@ use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf; // ✅ Import DomPDF
+use Illuminate\Support\Str;
+use App\Services\StakabaService;
 
 class DonorController extends Controller
 {
@@ -195,6 +197,61 @@ public function cancelEvent(Event $event)
         $activities = $query->paginate(10)->withQueryString();
         return view('donor.volunteer', compact('user', 'activities'));
     }
+
+    public function confirmDonation(Request $request, Campaign $campaign)
+{
+    $validated = $request->validate([
+        'amount' => 'required|numeric|min:1',
+    ]);
+
+    return view('donor.donations.confirm', [
+        'campaign' => $campaign,
+        'amount'   => $validated['amount'],
+    ]);
+}
+
+public function storeDonation(Request $request, StakabaService $stakaba)
+{
+    $validated = $request->validate([
+        'campaign_id'    => 'required|exists:campaigns,id',
+        'amount'         => 'required|numeric|min:1',
+        'payment_method' => 'required|string',
+    ]);
+
+    $localTx = (string) Str::uuid();
+
+    $donation = Donation::create([
+        'donor_id'       => Auth::id(),
+        'campaign_id'    => $validated['campaign_id'],
+        'amount'         => $validated['amount'],
+        'payment_method' => $validated['payment_method'],
+        'transaction_id' => $localTx,
+        'status'         => 'PENDING',
+    ]);
+
+    // Call Stakaba API
+    $payload = [
+        'amount'        => $validated['amount'],
+        'currency'      => 'TZS',
+        'paymentMethod' => $validated['payment_method'],
+        'reference'     => $localTx,
+        'metadata'      => ['donation_id' => $donation->id],
+    ];
+
+    $response = $stakaba->createOrder($payload);
+
+    if (!empty($response['orderId'])) {
+        $donation->update(['transaction_id' => $response['orderId']]);
+    }
+
+    if (!empty($response['checkout_url'])) {
+        return redirect()->away($response['checkout_url']);
+    }
+
+    return redirect()->route('donor.campaigns')
+                     ->with('success', 'Donation created. Complete payment using instructions.');
+}
+
 }
 
 
